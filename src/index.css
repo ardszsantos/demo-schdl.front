@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@config "../tailwind.config.js";
 
 /* Fix autofill background no dark mode */
 input:-webkit-autofill,
