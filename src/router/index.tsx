@@ -10,6 +10,9 @@ import { CoursesPage } from '../pages/CoursesPage'
 import { CreateCoursePage } from '../pages/CreateCoursePage'
 import { CourseDetailPage } from '../pages/CourseDetailPage'
 import { RoomsPage } from '../pages/RoomsPage'
+import { TeachersPage } from '../pages/TeachersPage'
+import { CreateTeacherPage } from '../pages/CreateTeacherPage'
+import { TeacherDetailPage } from '../pages/TeacherDetailPage'
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +36,9 @@ export const router = createBrowserRouter([
               { path: '/courses/new', element: <CreateCoursePage /> },
               { path: '/courses/:id', element: <CourseDetailPage /> },
               { path: '/rooms', element: <RoomsPage /> },
+              { path: '/teachers', element: <TeachersPage /> },
+              { path: '/teachers/new', element: <CreateTeacherPage /> },
+              { path: '/teachers/:id', element: <TeacherDetailPage /> },
             ],
           },
         ],

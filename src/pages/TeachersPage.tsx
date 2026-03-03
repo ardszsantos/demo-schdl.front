@@ -1,40 +1,39 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { deleteCourse, getCourses, type Course } from '../api/courses'
+import { deleteTeacher, getTeachers, type Teacher } from '../api/teachers'
 import type { ApiError } from '../api/auth'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Spinner } from '@/components/ui/spinner'
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 
-export function CoursesPage() {
+export function TeachersPage() {
   const navigate = useNavigate()
   const qc = useQueryClient()
-  const [deleteTarget, setDeleteTarget] = useState<Course | null>(null)
+  const [deleteTarget, setDeleteTarget] = useState<Teacher | null>(null)
 
   const { data, isLoading } = useQuery({
-    queryKey: ['courses'],
-    queryFn: getCourses,
+    queryKey: ['teachers'],
+    queryFn: () => getTeachers(),
   })
 
-  const deleteMutation = useMutation<void, ApiError, string>({
-    mutationFn: deleteCourse,
+  const deleteMutation = useMutation<Teacher, ApiError, string>({
+    mutationFn: deleteTeacher,
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['courses'] })
+      qc.invalidateQueries({ queryKey: ['teachers'] })
       setDeleteTarget(null)
     },
   })
 
-  const courses = data ?? []
+  const teachers = data ?? []
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between pb-2">
-        <h1 className="text-xl font-semibold text-white">Cursos</h1>
-        <Button size="sm" onClick={() => navigate('/courses/new')}>
-          + Novo Curso
+        <h1 className="text-xl font-semibold text-white">Professores</h1>
+        <Button size="sm" onClick={() => navigate('/teachers/new')}>
+          + Novo Professor
         </Button>
       </div>
 
@@ -48,43 +47,41 @@ export function CoursesPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Nome</TableHead>
-                <TableHead>Tipo</TableHead>
-                <TableHead>Criado em</TableHead>
+                <TableHead>Registro</TableHead>
+                <TableHead>Tipo de Contrato</TableHead>
+                <TableHead>H. Semanais</TableHead>
                 <TableHead>Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {courses.length === 0 ? (
+              {teachers.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={4} className="py-10 text-center text-zinc-500">
-                    Nenhum curso cadastrado.
+                  <TableCell colSpan={5} className="py-10 text-center text-zinc-500">
+                    Nenhum professor cadastrado.
                   </TableCell>
                 </TableRow>
               ) : (
-                courses.map((course) => (
-                  <TableRow key={course.id}>
-                    <TableCell className="font-medium text-white">{course.name}</TableCell>
+                teachers.map((teacher) => (
+                  <TableRow key={teacher.id}>
+                    <TableCell className="font-medium text-white">{teacher.name}</TableCell>
+                    <TableCell>{teacher.registration ?? '—'}</TableCell>
+                    <TableCell>{teacher.employment_type ?? '—'}</TableCell>
                     <TableCell>
-                      <Badge variant={course.type === 'FIC' ? 'default' : 'secondary'}>
-                        {course.type}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      {new Date(course.created_at).toLocaleDateString('pt-BR')}
+                      {teacher.weekly_hours_limit != null ? `${teacher.weekly_hours_limit}h` : '—'}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <Button
                           size="sm"
                           variant="ghost"
-                          onClick={() => navigate(`/courses/${course.id}`)}
+                          onClick={() => navigate(`/teachers/${teacher.id}`)}
                         >
                           Ver
                         </Button>
                         <Button
                           size="sm"
                           variant="destructive"
-                          onClick={() => setDeleteTarget(course)}
+                          onClick={() => setDeleteTarget(teacher)}
                         >
                           Deletar
                         </Button>
@@ -98,11 +95,10 @@ export function CoursesPage() {
         )}
       </div>
 
-      {/* Delete confirm */}
       <Dialog open={!!deleteTarget} onOpenChange={(open) => { if (!open) setDeleteTarget(null) }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Deletar curso</DialogTitle>
+            <DialogTitle>Deletar professor</DialogTitle>
           </DialogHeader>
           <p className="text-sm text-zinc-300">
             Tem certeza que deseja deletar{' '}

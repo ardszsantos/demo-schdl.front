@@ -21,13 +21,6 @@ export interface CourseWithUCs extends Course {
   ucs: UC[]
 }
 
-export interface PaginatedCourses {
-  data: Course[]
-  total: number
-  page: number
-  limit: number
-}
-
 export interface CreateCourseBody {
   name: string
   description?: string
@@ -72,8 +65,8 @@ async function authRequest<T>(path: string, options?: RequestInit): Promise<T> {
   return data as T
 }
 
-export function getCourses(page = 1, limit = 20) {
-  return authRequest<PaginatedCourses>(`/courses?page=${page}&limit=${limit}`)
+export function getCourses() {
+  return authRequest<Course[]>('/courses')
 }
 
 export function getCourse(id: string) {
