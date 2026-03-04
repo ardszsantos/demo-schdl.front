@@ -37,6 +37,7 @@ export function CourseDetailPage() {
   const [editName, setEditName] = useState('')
   const [editDesc, setEditDesc] = useState('')
   const [editType, setEditType] = useState<'FIC' | 'REGULAR'>('FIC')
+  const [editTotalHours, setEditTotalHours] = useState('')
   const [editError, setEditError] = useState('')
 
   function openEdit() {
@@ -44,6 +45,7 @@ export function CourseDetailPage() {
     setEditName(course.name)
     setEditDesc(course.description ?? '')
     setEditType(course.type)
+    setEditTotalHours(course.total_hours != null ? String(Number(course.total_hours)) : '')
     setEditError('')
     setShowEdit(true)
   }
@@ -186,6 +188,15 @@ export function CourseDetailPage() {
             <p className="text-zinc-500">Tipo</p>
             <p className="text-white">{course.type}</p>
           </div>
+          <div>
+            <p className="text-zinc-500">Carga horária total</p>
+            <p className="text-white">
+              {course.total_hours != null ? `${Number(course.total_hours)}h` : '—'}
+              {course.type === 'REGULAR' && course.total_hours != null && (
+                <span className="ml-1.5 text-xs text-zinc-500">(soma das UCs)</span>
+              )}
+            </p>
+          </div>
           <div className="col-span-2">
             <p className="text-zinc-500">Descrição</p>
             <p className="text-white">{course.description ?? '—'}</p>
@@ -283,6 +294,17 @@ export function CourseDetailPage() {
                 </SelectContent>
               </Select>
             </div>
+            {editType === 'FIC' && (
+              <div className="space-y-1.5">
+                <label className="text-sm font-medium text-zinc-400">Carga horária total (h)</label>
+                <Input
+                  type="number"
+                  min={1}
+                  value={editTotalHours}
+                  onChange={(e) => setEditTotalHours(e.target.value)}
+                />
+              </div>
+            )}
             {editError && <p className="text-sm text-red-400">{editError}</p>}
           </div>
           <DialogFooter>
@@ -296,6 +318,9 @@ export function CourseDetailPage() {
                   name: editName.trim(),
                   description: editDesc.trim() || undefined,
                   type: editType,
+                  ...(editType === 'FIC' && editTotalHours
+                    ? { total_hours: Number(editTotalHours) }
+                    : {}),
                 })
               }
             >

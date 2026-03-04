@@ -1,5 +1,71 @@
 @import "tailwindcss";
 
+/* FullCalendar dark zinc theme */
+.fc-dark-wrapper {
+  --fc-border-color: #27272a;
+  --fc-page-bg-color: #09090b;
+  --fc-neutral-bg-color: #18181b;
+  --fc-neutral-text-color: #a1a1aa;
+  --fc-today-bg-color: rgba(59, 130, 246, 0.06);
+  --fc-highlight-color: rgba(59, 130, 246, 0.15);
+  --fc-non-business-color: rgba(39, 39, 42, 0.3);
+  --fc-event-bg-color: #3b82f6;
+  --fc-event-border-color: #2563eb;
+  --fc-event-text-color: #ffffff;
+  --fc-button-bg-color: #27272a;
+  --fc-button-border-color: #3f3f46;
+  --fc-button-text-color: #d4d4d8;
+  --fc-button-hover-bg-color: #3f3f46;
+  --fc-button-hover-border-color: #52525b;
+  --fc-button-active-bg-color: #3b82f6;
+  --fc-button-active-border-color: #2563eb;
+  --fc-list-event-hover-bg-color: #27272a;
+}
+
+.fc-dark-wrapper .fc-toolbar-title {
+  color: #fafafa;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.fc-dark-wrapper .fc-col-header-cell-cushion,
+.fc-dark-wrapper .fc-daygrid-day-number,
+.fc-dark-wrapper .fc-list-event-title a,
+.fc-dark-wrapper .fc-list-day-text,
+.fc-dark-wrapper .fc-list-day-side-text {
+  color: #a1a1aa;
+  text-decoration: none;
+}
+
+.fc-dark-wrapper .fc-day-today .fc-daygrid-day-number {
+  color: #60a5fa;
+}
+
+.fc-dark-wrapper .fc-timegrid-slot-label-cushion {
+  color: #71717a;
+  font-size: 0.75rem;
+}
+
+.fc-dark-wrapper th {
+  border-color: #27272a;
+}
+
+.fc-dark-wrapper .fc-daygrid-event,
+.fc-dark-wrapper .fc-timegrid-event {
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+.fc-dark-wrapper .fc-list-empty {
+  background: #09090b;
+  color: #71717a;
+}
+
+.fc-dark-wrapper .fc-list-table td,
+.fc-dark-wrapper .fc-list-table th {
+  border-color: #27272a;
+}
+
 /* Fix autofill background no dark mode */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,

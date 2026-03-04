@@ -53,6 +53,7 @@ export function CreateCoursePage() {
   const [name, setName] = useState('')
   const [desc, setDesc] = useState('')
   const [type, setType] = useState<'FIC' | 'REGULAR'>('FIC')
+  const [totalHours, setTotalHours] = useState('')
   const [error, setError] = useState('')
 
   const mutation = useMutation<Course, ApiError, CreateCourseBody>({
@@ -66,11 +67,13 @@ export function CreateCoursePage() {
 
   function handleSubmit() {
     if (!name.trim()) return
+    if (type === 'FIC' && !totalHours) return
     setError('')
     mutation.mutate({
       name: name.trim(),
       ...(desc.trim() ? { description: desc.trim() } : {}),
       type,
+      ...(type === 'FIC' ? { total_hours: Number(totalHours) } : {}),
     })
   }
 
@@ -128,6 +131,24 @@ export function CreateCoursePage() {
                   rows={4}
                 />
               </div>
+
+              {type === 'FIC' && (
+                <div className="space-y-1.5">
+                  <label className="text-sm font-medium text-zinc-400">
+                    Carga horária total (h) <span className="text-red-400">*</span>
+                  </label>
+                  <Input
+                    type="number"
+                    min={1}
+                    placeholder="Ex: 40"
+                    value={totalHours}
+                    onChange={(e) => setTotalHours(e.target.value)}
+                  />
+                  <p className="text-xs text-zinc-600">
+                    Para cursos REGULAR, as horas são calculadas automaticamente pela soma das UCs.
+                  </p>
+                </div>
+              )}
             </div>
           </section>
 
@@ -206,10 +227,17 @@ export function CreateCoursePage() {
                     <span className="text-zinc-600">Tipo</span>
                     <span className={`font-medium ${selectedOpt.badge}`}>{selectedOpt.title}</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-zinc-600">UCs</span>
-                    <span className="text-zinc-400">0 cadastradas</span>
-                  </div>
+                  {type === 'FIC' ? (
+                    <div className="flex justify-between">
+                      <span className="text-zinc-600">Horas</span>
+                      <span className="text-zinc-400">{totalHours ? `${totalHours}h` : '—'}</span>
+                    </div>
+                  ) : (
+                    <div className="flex justify-between">
+                      <span className="text-zinc-600">UCs</span>
+                      <span className="text-zinc-400">0 cadastradas</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </section>
@@ -234,7 +262,7 @@ export function CreateCoursePage() {
         </Button>
         <Button
           size="lg"
-          disabled={!name.trim() || mutation.isPending}
+          disabled={!name.trim() || (type === 'FIC' && !totalHours) || mutation.isPending}
           onClick={handleSubmit}
           className="px-8"
         >

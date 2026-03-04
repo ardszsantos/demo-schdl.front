@@ -15,7 +15,7 @@ export function TeachersPage() {
 
   const { data, isLoading } = useQuery({
     queryKey: ['teachers'],
-    queryFn: () => getTeachers(),
+    queryFn: getTeachers,
   })
 
   const deleteMutation = useMutation<Teacher, ApiError, string>({
@@ -49,7 +49,7 @@ export function TeachersPage() {
                 <TableHead>Nome</TableHead>
                 <TableHead>Registro</TableHead>
                 <TableHead>Tipo de Contrato</TableHead>
-                <TableHead>H. Semanais</TableHead>
+                <TableHead>E-mail</TableHead>
                 <TableHead>Ações</TableHead>
               </TableRow>
             </TableHeader>
@@ -66,9 +66,7 @@ export function TeachersPage() {
                     <TableCell className="font-medium text-white">{teacher.name}</TableCell>
                     <TableCell>{teacher.registration ?? '—'}</TableCell>
                     <TableCell>{teacher.employment_type ?? '—'}</TableCell>
-                    <TableCell>
-                      {teacher.weekly_hours_limit != null ? `${teacher.weekly_hours_limit}h` : '—'}
-                    </TableCell>
+                    <TableCell>{teacher.email ?? '—'}</TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
                         <Button

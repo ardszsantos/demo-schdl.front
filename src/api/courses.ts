@@ -14,6 +14,7 @@ export interface Course {
   name: string
   description: string | null
   type: 'FIC' | 'REGULAR'
+  total_hours: number | string | null
   created_at: string
 }
 
@@ -25,12 +26,14 @@ export interface CreateCourseBody {
   name: string
   description?: string
   type: 'FIC' | 'REGULAR'
+  total_hours?: number
 }
 
 export interface UpdateCourseBody {
   name?: string
   description?: string
   type?: 'FIC' | 'REGULAR'
+  total_hours?: number
 }
 
 export interface CreateUCBody {

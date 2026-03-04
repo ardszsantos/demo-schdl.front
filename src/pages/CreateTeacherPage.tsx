@@ -16,8 +16,6 @@ export function CreateTeacherPage() {
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [employmentType, setEmploymentType] = useState('')
-  const [weeklyHours, setWeeklyHours] = useState('')
-  const [monthlyHours, setMonthlyHours] = useState('')
   const [error, setError] = useState('')
 
   const mutation = useMutation<Teacher, ApiError, CreateTeacherBody>({
@@ -38,8 +36,6 @@ export function CreateTeacherPage() {
       ...(email.trim() ? { email: email.trim() } : {}),
       ...(phone.trim() ? { phone: phone.trim() } : {}),
       ...(employmentType.trim() ? { employment_type: employmentType.trim() } : {}),
-      ...(weeklyHours ? { weekly_hours_limit: Number(weeklyHours) } : {}),
-      ...(monthlyHours ? { monthly_hours_limit: Number(monthlyHours) } : {}),
     })
   }
 
@@ -81,9 +77,17 @@ export function CreateTeacherPage() {
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-zinc-400">Registro</label>
             <Input
-              placeholder="Ex: 12345"
+              placeholder="Ex: MAT001"
               value={registration}
               onChange={(e) => setRegistration(e.target.value)}
+            />
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-sm font-medium text-zinc-400">Tipo de contrato</label>
+            <Input
+              placeholder="Ex: CLT, PJ, Horista"
+              value={employmentType}
+              onChange={(e) => setEmploymentType(e.target.value)}
             />
           </div>
           <div className="space-y-1.5">
@@ -101,34 +105,6 @@ export function CreateTeacherPage() {
               placeholder="(XX) XXXXX-XXXX"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-            />
-          </div>
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium text-zinc-400">Tipo de contrato</label>
-            <Input
-              placeholder="Ex: CLT, PJ, Horista"
-              value={employmentType}
-              onChange={(e) => setEmploymentType(e.target.value)}
-            />
-          </div>
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium text-zinc-400">Limite de horas semanais</label>
-            <Input
-              type="number"
-              placeholder="Ex: 40"
-              min={0}
-              value={weeklyHours}
-              onChange={(e) => setWeeklyHours(e.target.value)}
-            />
-          </div>
-          <div className="space-y-1.5">
-            <label className="text-sm font-medium text-zinc-400">Limite de horas mensais</label>
-            <Input
-              type="number"
-              placeholder="Ex: 160"
-              min={0}
-              value={monthlyHours}
-              onChange={(e) => setMonthlyHours(e.target.value)}
             />
           </div>
         </div>

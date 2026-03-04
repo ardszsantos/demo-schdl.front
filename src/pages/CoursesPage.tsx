@@ -49,6 +49,7 @@ export function CoursesPage() {
               <TableRow>
                 <TableHead>Nome</TableHead>
                 <TableHead>Tipo</TableHead>
+                <TableHead>Horas</TableHead>
                 <TableHead>Criado em</TableHead>
                 <TableHead>Ações</TableHead>
               </TableRow>
@@ -56,7 +57,7 @@ export function CoursesPage() {
             <TableBody>
               {courses.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={4} className="py-10 text-center text-zinc-500">
+                  <TableCell colSpan={5} className="py-10 text-center text-zinc-500">
                     Nenhum curso cadastrado.
                   </TableCell>
                 </TableRow>
@@ -68,6 +69,9 @@ export function CoursesPage() {
                       <Badge variant={course.type === 'FIC' ? 'default' : 'secondary'}>
                         {course.type}
                       </Badge>
+                    </TableCell>
+                    <TableCell>
+                      {course.total_hours != null ? `${Number(course.total_hours)}h` : '—'}
                     </TableCell>
                     <TableCell>
                       {new Date(course.created_at).toLocaleDateString('pt-BR')}

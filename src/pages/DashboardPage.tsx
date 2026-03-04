@@ -8,9 +8,19 @@ const NAV_CARDS = [
     description: 'Gerencie cursos FIC e Regulares e suas UCs.',
   },
   {
+    to: '/teachers',
+    label: 'Professores',
+    description: 'Cadastre e gerencie os professores e suas escalas.',
+  },
+  {
     to: '/rooms',
     label: 'Salas',
     description: 'Cadastre e gerencie as salas de aula disponíveis.',
+  },
+  {
+    to: '/calendar',
+    label: 'Calendário',
+    description: 'Visualize a agenda de aulas e gerencie o calendário letivo.',
   },
 ]
 
