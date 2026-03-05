@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
-import { BLOCK_COLORS } from '@/lib/blockColors'
+import { BLOCK_COLORS, DEFAULT_BLOCK_COLOR } from '@/lib/blockColors'
 import {
   updateBlock,
   extractHHMM,
@@ -39,31 +39,28 @@ const STATUS_OPTIONS: BlockStatus[] = ['PLANNED', 'ACTIVE', 'COMPLETED', 'CANCEL
 
 interface Props {
   block: ScheduleBlock | null
-  color: string
-  onColorChange: (blockId: string, color: string) => void
   onClose: () => void
 }
 
-export function EditBlockModal({ block, color, onColorChange, onClose }: Props) {
+export function EditBlockModal({ block, onClose }: Props) {
   const qc = useQueryClient()
   const [name, setName] = useState('')
   const [status, setStatus] = useState<BlockStatus>('PLANNED')
-  const [selectedColor, setSelectedColor] = useState(color)
+  const [selectedColor, setSelectedColor] = useState(DEFAULT_BLOCK_COLOR)
   const [error, setError] = useState('')
 
   useEffect(() => {
     if (block) {
       setName(block.name)
       setStatus(block.status)
-      setSelectedColor(color)
+      setSelectedColor(block.color ?? DEFAULT_BLOCK_COLOR)
       setError('')
     }
-  }, [block, color])
+  }, [block])
 
   const mutation = useMutation<ScheduleBlock, unknown, UpdateScheduleBlockBody>({
     mutationFn: (body) => updateBlock(block!.id, body),
     onSuccess: () => {
-      onColorChange(block!.id, selectedColor)
       qc.invalidateQueries({ queryKey: ['blocks'] })
       onClose()
     },
@@ -73,7 +70,7 @@ export function EditBlockModal({ block, color, onColorChange, onClose }: Props) 
   function handleSave() {
     if (!name.trim() || !block) return
     setError('')
-    mutation.mutate({ name: name.trim(), status })
+    mutation.mutate({ name: name.trim(), status, color: selectedColor })
   }
 
   if (!block) return null

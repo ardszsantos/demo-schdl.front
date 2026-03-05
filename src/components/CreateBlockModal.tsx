@@ -43,10 +43,9 @@ const DAY_LABELS = [
 interface Props {
   open: boolean
   onClose: () => void
-  onBlockCreated?: (blockId: string, color: string) => void
 }
 
-export function CreateBlockModal({ open, onClose, onBlockCreated }: Props) {
+export function CreateBlockModal({ open, onClose }: Props) {
   const qc = useQueryClient()
 
   const [name, setName] = useState('')
@@ -88,8 +87,7 @@ export function CreateBlockModal({ open, onClose, onBlockCreated }: Props) {
 
   const mutation = useMutation<ScheduleBlock, BlockConflictError, CreateScheduleBlockBody>({
     mutationFn: createBlock,
-    onSuccess: (block) => {
-      onBlockCreated?.(block.id, selectedColor)
+    onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['blocks'] })
       handleClose()
     },
@@ -146,6 +144,7 @@ export function CreateBlockModal({ open, onClose, onBlockCreated }: Props) {
     setConflictError('')
     mutation.mutate({
       name,
+      color: selectedColor,
       teacher_id: teacherId,
       course_id: courseId,
       uc_id: ucId,

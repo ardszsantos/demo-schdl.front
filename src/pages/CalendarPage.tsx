@@ -10,11 +10,7 @@ import type { EventInput, DatesSetArg, EventClickArg } from '@fullcalendar/core'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
-import {
-  DEFAULT_BLOCK_COLOR,
-  loadBlockColors,
-  saveBlockColor,
-} from '@/lib/blockColors'
+import { DEFAULT_BLOCK_COLOR } from '@/lib/blockColors'
 import { getBlocks, getBlockSessions, extractHHMM } from '../api/blocks'
 import { getCalendarEvents, type CalendarEventType } from '../api/calendar'
 import { CreateBlockModal } from '../components/CreateBlockModal'
@@ -44,7 +40,6 @@ export function CalendarPage() {
   const [search, setSearch] = useState('')
   const [filterDays, setFilterDays] = useState<number[]>([])
   const [editingBlockId, setEditingBlockId] = useState<string | null>(null)
-  const [blockColors, setBlockColors] = useState<Record<string, string>>(loadBlockColors)
 
   const { data: blocksPage } = useQuery({
     queryKey: ['blocks'],
@@ -86,14 +81,6 @@ export function CalendarPage() {
     )
   }, [blocks, search])
 
-  function handleSetBlockColor(blockId: string, color: string) {
-    setBlockColors((prev) => saveBlockColor(blockId, color, prev))
-  }
-
-  function handleBlockCreated(blockId: string, color: string) {
-    handleSetBlockColor(blockId, color)
-  }
-
   function toggleDay(day: number) {
     setFilterDays((prev) =>
       prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day],
@@ -128,7 +115,7 @@ export function CalendarPage() {
       const sessions = sessionsByBlockId.get(block.id) ?? []
       const startHHMM = extractHHMM(block.start_time)
       const endHHMM = extractHHMM(block.end_time)
-      const color = blockColors[block.id] ?? DEFAULT_BLOCK_COLOR
+      const color = block.color ?? DEFAULT_BLOCK_COLOR
 
       sessions.forEach((session) => {
         if (filterDays.length > 0) {
@@ -163,7 +150,7 @@ export function CalendarPage() {
     })
 
     return events
-  }, [filteredBlocks, sessionsByBlockId, calEvents, blockColors, filterDays])
+  }, [filteredBlocks, sessionsByBlockId, calEvents, filterDays])
 
   return (
     <div className="space-y-4">
@@ -287,7 +274,6 @@ height="auto"
       <CreateBlockModal
         open={showCreateBlock}
         onClose={() => setShowCreateBlock(false)}
-        onBlockCreated={handleBlockCreated}
       />
       <ManageCalendarModal
         open={showManageCalendar}
@@ -295,8 +281,6 @@ height="auto"
       />
       <EditBlockModal
         block={editingBlock}
-        color={editingBlock ? (blockColors[editingBlock.id] ?? DEFAULT_BLOCK_COLOR) : DEFAULT_BLOCK_COLOR}
-        onColorChange={handleSetBlockColor}
         onClose={() => setEditingBlockId(null)}
       />
     </div>

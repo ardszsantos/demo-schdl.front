@@ -5,6 +5,7 @@ export type BlockStatus = 'PLANNED' | 'ACTIVE' | 'IN_PROGRESS' | 'COMPLETED' | '
 export interface ScheduleBlock {
   id: string
   name: string
+  color: string | null
   teacher: { id: string; name: string }
   course: { id: string; name: string; type: 'FIC' | 'REGULAR' }
   uc: { id: string; name: string } | null
@@ -28,6 +29,7 @@ export interface BlockSession {
 
 export interface CreateScheduleBlockBody {
   name: string
+  color?: string
   teacher_id: string
   course_id: string
   uc_id: string | null
@@ -41,6 +43,7 @@ export interface CreateScheduleBlockBody {
 
 export interface UpdateScheduleBlockBody {
   name?: string
+  color?: string
   status?: BlockStatus
   teacher_id?: string
   course_id?: string
